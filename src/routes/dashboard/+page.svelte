@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { SITE_NAME } from '$constants/common';
 	import Dashboard from '$pages/Dashboard/Dashboard.svelte';
 	import type { PageData } from './$types';
 
@@ -10,7 +11,7 @@
 </script>
 
 <svelte:head>
-	<title>{SITE_NAME} — Настройки</title>
+	<title>{SITE_NAME} — Дашбоард</title>
 </svelte:head>
 
 <Dashboard {...data} />
