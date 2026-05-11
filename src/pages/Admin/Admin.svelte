@@ -103,7 +103,7 @@
 							action="?/delete_post"
 							use:enhance
 							style="margin:0;"
-							onsubmit={(e) => {
+							 onsubmit={(e) => {
 								if (!confirm('Точно удалить статью?')) e.preventDefault();
 							}}
 						>
@@ -148,7 +148,7 @@
 							action="?/delete_test"
 							use:enhance
 							style="margin:0;"
-							onsubmit={(e) => {
+							 onsubmit={(e) => {
 								if (!confirm('Удалить тест и ВСЕ результаты пользователей?')) e.preventDefault();
 							}}
 						>
@@ -174,6 +174,20 @@
 						{#each tests as test (test.id)}<option value={test.id}>{test.title}</option>{/each}
 					</select>
 				</label>
+				<label>Тип вопроса
+					<select name="type">
+						<option value="text">Текстовый ответ</option>
+						<option value="mcq">Выбор варианта</option>
+						<option value="amsler">Амслер (Да/Нет)</option>
+						<option value="duochrome">Духром</option>
+						<option value="dominance">Ведущий глаз</option>
+						<option value="snellen">Снеллен (процедурный)</option>
+						<option value="landolt">Ландольт (процедурный)</option>
+						<option value="ishihara">Ишихара (процедурный)</option>
+						<option value="astigmatism">Астигматизм (процедурный)</option>
+						<option value="contrast">Контраст (процедурный)</option>
+					</select>
+				</label>
 				<label
 					>Текст вопроса <input
 						name="question_text"
@@ -184,7 +198,8 @@
 				<label
 					>Картинка (URL) <input name="image_url" type="url" placeholder="Необязательно" /></label
 				>
-				<label>Ответ <input name="answer" type="text" required /></label>
+				<label>Ответ <input name="answer" type="text" placeholder="Для MCQ — индекс или значение" required /></label>
+				<label>Опции (JSON) <textarea name="options" rows="2" placeholder='{"choices":["A","B"]} или конфиг процедурного теста'></textarea></label>
 				<button type="submit" class="secondary">Сохранить вопрос</button>
 			</form>
 		</article>
@@ -197,7 +212,7 @@
 			<table>
 				<thead
 					><tr
-						><th>Тест</th><th>Текст вопроса</th><th>Картинка URL</th><th>Ответ</th><th>Действия</th
+						><th>Тест</th><th>Тип</th><th>Текст вопроса</th><th>Ответ</th><th>Действия</th
 						></tr
 					></thead
 				>
@@ -213,30 +228,32 @@
 										action="?/edit_question"
 										use:enhance
 										onsubmit={() => (editQuestionId = null)}
-										style="margin: 0; display: flex; gap: 10px;"
+										style="margin: 0; display: flex; gap: 10px; flex-wrap: wrap;"
 									>
 										<input type="hidden" name="id" value={q.id} />
+										<input type="text" name="type" value={q.type || 'text'} placeholder="тип" style="width: 80px;" />
 										<input
 											type="text"
 											name="question_text"
 											value={q.question_text}
 											placeholder="Текст"
-											style="flex:1;"
+											style="flex:1; min-width: 100px;"
 										/>
 										<input
 											type="url"
 											name="image_url"
 											value={q.image_url}
 											placeholder="URL"
-											style="flex:1;"
+											style="flex:1; min-width: 100px;"
 										/>
 										<input
 											type="text"
 											name="answer"
 											value={q.answer}
 											required
-											style="width: 100px;"
+											style="width: 90px;"
 										/>
+										<input type="text" name="options" value={q.options || ''} placeholder="JSON опции" style="width: 140px;" />
 										<button type="submit" style="width: auto; padding: 5px;">💾</button>
 										<button
 											type="button"
@@ -251,11 +268,8 @@
 							<!-- Режим просмотра -->
 							<tr>
 								<td>{getTestTitle(q.test_id)}</td>
+								<td><span class="type-badge">{q.type || 'text'}</span></td>
 								<td>{q.question_text || '-'}</td>
-								<td
-									>{#if q.image_url}<a href={q.image_url} target="_blank">Ссылка</a
-										>{:else}-{/if}</td
-								>
 								<td><strong>{q.answer}</strong></td>
 								<td style="display: flex; gap: 5px;">
 									<button
@@ -279,3 +293,15 @@
 		</div>
 	</article>
 {/if}
+
+<style>
+	.type-badge {
+		font-size: 0.75rem;
+		padding: 2px 8px;
+		border-radius: 999px;
+		background: #e0e7ff;
+		color: #3730a3;
+		font-weight: 600;
+		white-space: nowrap;
+	}
+</style>

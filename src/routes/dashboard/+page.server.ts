@@ -12,7 +12,7 @@ export const load = async ({ locals }) => {
 		.prepare<
 			unknown[],
 			TestResult
-		>('SELECT id, test_id, score, created_at FROM test_results WHERE user_id = ? ORDER BY created_at ASC')
+		>('SELECT id, test_id, score, details, created_at FROM test_results WHERE user_id = ? ORDER BY created_at ASC')
 		.all(locals.user.id);
 	const visionLogs = db
 		.prepare<

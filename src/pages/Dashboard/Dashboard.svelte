@@ -227,7 +227,13 @@
 					{#each filteredTestResults as result (result.id)}
 						<tr>
 							<td>{new Date(result.created_at).toLocaleDateString()}</td>
-							<td>{result.score}%</td>
+							<td>
+								<strong>{result.score}%</strong>
+								{#if result.details}
+									<br />
+									<small style="color: #6b7280;">{result.details}</small>
+								{/if}
+							</td>
 							<td>
 								<form method="POST" action="?/delete_test" use:enhance style="margin: 0;">
 									<input type="hidden" name="id" value={result.id} />

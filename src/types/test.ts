@@ -9,6 +9,7 @@ export type TestResult = {
 	test_id: number;
 	created_at: string;
 	score: number;
+	details?: string;
 };
 
 export type Question = {
@@ -17,4 +18,6 @@ export type Question = {
 	question_text: string;
 	answer: string;
 	image_url?: string;
+	type?: string;
+	options?: string;
 };

@@ -14,10 +14,11 @@ export const actions = {
 	save: async ({ request, params, locals }) => {
 		if (!locals.user) throw redirect(302, '/login');
 		const data = await request.formData();
-		db.prepare('INSERT INTO test_results (user_id, test_id, score) VALUES (?, ?, ?)').run(
+		db.prepare('INSERT INTO test_results (user_id, test_id, score, details) VALUES (?, ?, ?, ?)').run(
 			locals.user.id,
 			params.id,
-			data.get('score')
+			data.get('score'),
+			data.get('details') ?? null
 		);
 		throw redirect(303, '/dashboard');
 	}

@@ -58,23 +58,27 @@ export const actions = {
 	add_question: async ({ request }) => {
 		const data = await request.formData();
 		db.prepare(
-			'INSERT INTO questions (test_id, question_text, image_url, answer) VALUES (?, ?, ?, ?)'
+			'INSERT INTO questions (test_id, question_text, image_url, answer, type, options) VALUES (?, ?, ?, ?, ?, ?)'
 		).run(
 			data.get('test_id'),
 			data.get('question_text') || '',
 			data.get('image_url') || '',
-			data.get('answer')
+			data.get('answer'),
+			data.get('type') || 'text',
+			data.get('options') || null
 		);
 		return { success: 'Вопрос добавлен' };
 	},
 	edit_question: async ({ request }) => {
 		const data = await request.formData();
 		db.prepare(
-			'UPDATE questions SET question_text = ?, image_url = ?, answer = ? WHERE id = ?'
+			'UPDATE questions SET question_text = ?, image_url = ?, answer = ?, type = ?, options = ? WHERE id = ?'
 		).run(
 			data.get('question_text') || '',
 			data.get('image_url') || '',
 			data.get('answer'),
+			data.get('type') || 'text',
+			data.get('options') || null,
 			data.get('id')
 		);
 		return { success: 'Вопрос обновлен' };
